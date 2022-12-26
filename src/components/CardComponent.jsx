@@ -12,10 +12,37 @@ import {
 } from "@material-ui/icons";
 import JsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { makeStyles } from "@material-ui/core";
+
+const useStyles = makeStyles(() => ({
+  cardBox: {
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    "& > :not(style)": {
+      m: 1,
+      width: 170,
+      height: 230,
+    },
+  },
+  paperCard: {
+    padding: "10px",
+  },
+  printTitle: {
+    display: "flex",
+    justifyContent: "flex-end",
+  },
+  iconCard: {
+    display: "flex",
+    justifyContent: "center",
+    margin: "0 0 20px",
+  },
+}));
 
 export default function CardComponent({ id, index, text, ...props }) {
   const [icon, setIcon] = useState(text);
   const [, setIsDragging] = useState(false);
+  const classes = useStyles();
 
   const handleDragStart = (e) => {
     // Set the data that will be transferred during the drag operation
@@ -58,42 +85,15 @@ export default function CardComponent({ id, index, text, ...props }) {
     setIcon(spanRef.current.innerHTML);
   }
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexWrap: "wrap",
-        justifyContent: "center",
-        "& > :not(style)": {
-          m: 1,
-          width: 170,
-          height: 230,
-        },
-      }}
-      id={`card_${id}`}
-    >
-      <Paper
-        {...props}
-        elevation={3}
-        sx={{
-          padding: "10px",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-          }}
-        >
+    <Box className={classes.cardBox} id={`card_${id}`}>
+      <Paper {...props} elevation={3} className={classes.paperCard}>
+        <div className={classes.printTitle}>
           <Fab size="small" onClick={generatePDF} type="button">
             <Print />
           </Fab>
         </div>
         <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            margin: "0 0 20px",
-          }}
+          className={classes.iconCard}
           draggable
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
